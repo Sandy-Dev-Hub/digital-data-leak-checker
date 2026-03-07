@@ -1,0 +1,150 @@
+{% extends "base.html" %}
+
+{% block title %}LeakChecker — Digital Data Leak Checker{% endblock %}
+
+{% block content %}
+
+<!-- Hero Section -->
+<section class="hero">
+  <div class="hero-badge">
+    <span class="pulse"></span>
+    Live Security Scanner
+  </div>
+  <h1>Check Your <span class="gradient-text">Digital Risk</span> Exposure</h1>
+  <p class="hero-subtitle">Enter your email and phone number to analyze potential security vulnerabilities and receive personalized protection tips.</p>
+</section>
+
+<!-- Scan Form -->
+<div class="container">
+  <div class="card form-card">
+
+    <form method="POST">
+      <div class="form-group">
+        <label class="form-label">Email Address</label>
+        <input type="email" name="email" class="form-input" placeholder="you@example.com" required>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Phone Number</label>
+        <input type="text" name="phone" class="form-input" maxlength="10" placeholder="10-digit phone number" required>
+      </div>
+
+      <button type="submit" class="btn btn-primary btn-full">
+        🔍 Analyze Risk
+      </button>
+    </form>
+
+    {% if error %}
+    <div class="error-msg">⚠️ {{ error }}</div>
+    {% endif %}
+
+  </div>
+
+  <!-- Results -->
+  {% if total_score is not none and total_score is defined %}
+  <div class="results-section mt-4">
+
+    <!-- Score Header -->
+    <div class="score-header {{ 'low' if level == 'LOW' else ('medium' if level == 'MEDIUM' else 'high') }}">
+      <div>
+        <div class="score-label">Total Risk Score</div>
+        <div class="score-value">{{ total_score }}</div>
+      </div>
+      <span class="risk-badge {{ 'low' if level == 'LOW' else ('medium' if level == 'MEDIUM' else 'high') }}">
+        {{ '🟢' if level == 'LOW' else ('🟡' if level == 'MEDIUM' else '🔴') }} {{ level }} RISK
+      </span>
+    </div>
+
+    <!-- Score Breakdown -->
+    <div class="score-grid">
+      <div class="score-card">
+        <div class="score-card-header">
+          <div>
+            <div class="score-card-title">Email Score</div>
+            <div class="score-card-value">{{ email_score }}</div>
+          </div>
+          <div class="score-card-icon email">✉️</div>
+        </div>
+        {% if email_reasons %}
+        <div class="reason-list">
+          {% for r in email_reasons %}
+          <span class="reason-tag">⚡ {{ r }}</span>
+          {% endfor %}
+        </div>
+        {% endif %}
+      </div>
+
+      <div class="score-card">
+        <div class="score-card-header">
+          <div>
+            <div class="score-card-title">Phone Score</div>
+            <div class="score-card-value">{{ phone_score }}</div>
+          </div>
+          <div class="score-card-icon phone">📱</div>
+        </div>
+        {% if phone_reasons %}
+        <div class="reason-list">
+          {% for r in phone_reasons %}
+          <span class="reason-tag">⚡ {{ r }}</span>
+          {% endfor %}
+        </div>
+        {% endif %}
+      </div>
+    </div>
+
+    <!-- Tips -->
+    <div class="card">
+      <div class="tips-section">
+        <div class="tips-section-title">🛡️ General Security Tips</div>
+        <div class="tips-grid">
+          {% for tip in general_tips %}
+          <div class="tip-item">
+            <div class="tip-icon">✓</div>
+            <span>{{ tip }}</span>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+
+      <div class="section-divider"></div>
+
+      <div class="tips-columns">
+        <div class="tips-section">
+          <div class="tips-section-title">✉️ Email Tips</div>
+          <div class="tips-grid">
+            {% for tip in email_tips %}
+            <div class="tip-item">
+              <div class="tip-icon">✓</div>
+              <span>{{ tip }}</span>
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+
+        <div class="tips-section">
+          <div class="tips-section-title">📱 Phone Tips</div>
+          <div class="tips-grid">
+            {% for tip in phone_tips %}
+            <div class="tip-item">
+              <div class="tip-icon">✓</div>
+              <span>{{ tip }}</span>
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+  {% endif %}
+
+</div>
+
+{% if total_score == 0 %}
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+<script>
+confetti({ particleCount: 200, spread: 120 });
+</script>
+{% endif %}
+
+{% endblock %}

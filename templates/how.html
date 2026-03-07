@@ -1,0 +1,133 @@
+{% extends "base.html" %}
+
+{% block title %}How it Works — LeakChecker{% endblock %}
+
+{% block content %}
+
+<div class="how-page container-wide">
+
+  <h1 class="section-title">How <span class="gradient-text">LeakChecker</span> Works</h1>
+  <p class="section-subtitle">A cybersecurity awareness tool that analyzes patterns in your personal data and provides actionable security recommendations.</p>
+
+  <div class="card">
+
+    <!-- Step 1 -->
+    <div class="how-section">
+      <div class="how-section-header">
+        <div class="how-section-number">1</div>
+        <h2 class="how-section-title">User Input</h2>
+      </div>
+      <p>The process begins when you enter an email address and phone number. Before analysis, the application validates the information to ensure correct formatting.</p>
+      <ul>
+        <li>Email format is checked using regular expressions</li>
+        <li>Phone number must contain exactly 10 digits</li>
+      </ul>
+    </div>
+
+    <div class="section-divider"></div>
+
+    <!-- Step 2 -->
+    <div class="how-section">
+      <div class="how-section-header">
+        <div class="how-section-number">2</div>
+        <h2 class="how-section-title">Risk Analysis</h2>
+      </div>
+      <p>After validation, the system analyzes patterns in the email and phone number to identify potential security risks.</p>
+      <ul>
+        <li>Common public email domains may increase exposure risk</li>
+        <li>Short usernames are easier to guess</li>
+        <li>Numbers inside usernames may create predictable patterns</li>
+        <li>Phone numbers with common prefixes are analyzed</li>
+        <li>Sequential digits increase vulnerability</li>
+      </ul>
+    </div>
+
+    <div class="section-divider"></div>
+
+    <!-- Step 3 -->
+    <div class="how-section">
+      <div class="how-section-header">
+        <div class="how-section-number">3</div>
+        <h2 class="how-section-title">Risk Score Calculation</h2>
+      </div>
+      <p>Each detected pattern contributes to a risk score. The system calculates separate scores for email and phone, then combines them.</p>
+      <ul>
+        <li>Email Risk Score</li>
+        <li>Phone Risk Score</li>
+        <li>Total Risk Score</li>
+      </ul>
+    </div>
+
+    <div class="section-divider"></div>
+
+    <!-- Step 4 -->
+    <div class="how-section">
+      <div class="how-section-header">
+        <div class="how-section-number">4</div>
+        <h2 class="how-section-title">Risk Classification</h2>
+      </div>
+      <p>Based on the total score, the system categorizes the risk level into three groups:</p>
+      <ul>
+        <li><strong>Low Risk</strong> — Minimal exposure</li>
+        <li><strong>Medium Risk</strong> — Moderate risk</li>
+        <li><strong>High Risk</strong> — Higher probability of data exposure</li>
+      </ul>
+    </div>
+
+    <div class="section-divider"></div>
+
+    <!-- Step 5 -->
+    <div class="how-section">
+      <div class="how-section-header">
+        <div class="how-section-number">5</div>
+        <h2 class="how-section-title">Breach Detection</h2>
+      </div>
+      <p>LeakChecker compares your email against a simulated breach dataset representing known cybersecurity incidents. If a match is found, the system displays the platform name, year of the breach, and the type of data exposed.</p>
+    </div>
+
+    <div class="section-divider"></div>
+
+    <!-- Step 6 -->
+    <div class="how-section">
+      <div class="how-section-header">
+        <div class="how-section-number">6</div>
+        <h2 class="how-section-title">Security Recommendations</h2>
+      </div>
+      <p>After completing the analysis, the system provides tailored security suggestions to improve your online safety.</p>
+      <ul>
+        <li>Enable Two Factor Authentication</li>
+        <li>Avoid sharing phone numbers publicly</li>
+        <li>Use strong and unique passwords</li>
+        <li>Monitor account activity regularly</li>
+      </ul>
+    </div>
+
+  </div>
+
+  <!-- Workflow Diagram -->
+  <div class="card mt-4">
+    <div class="tips-section-title" style="justify-content:center; margin-bottom:1.5rem;">⚙️ System Workflow</div>
+    <div class="workflow-diagram">
+      <div class="workflow-step">User Input</div>
+      <div class="workflow-arrow">→</div>
+      <div class="workflow-step">Pattern Analysis</div>
+      <div class="workflow-arrow">→</div>
+      <div class="workflow-step">Risk Score</div>
+      <div class="workflow-arrow">→</div>
+      <div class="workflow-step">Breach Check</div>
+      <div class="workflow-arrow">→</div>
+      <div class="workflow-step">Security Tips</div>
+    </div>
+  </div>
+
+  <!-- Conclusion -->
+  <div class="card mt-3">
+    <div class="tips-section-title" style="justify-content:center;">📋 Conclusion</div>
+    <p style="color: var(--text-secondary); text-align: center; line-height: 1.8; margin-top: 0.75rem;">
+      LeakChecker demonstrates how simple pattern analysis and breach monitoring can help you become more aware of your digital security. By analyzing personal data patterns and providing recommendations, the system encourages safer online practices.
+    </p>
+  </div>
+
+</div>
+
+{% endblock %}

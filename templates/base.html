@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="LeakChecker — Analyze your digital footprint, detect data breaches, and get personalized security recommendations.">
+  <title>{% block title %}LeakChecker{% endblock %}</title>
+  <link rel="icon" href="{{ url_for('static', filename='favicon.png') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+  <!-- Navbar -->
+  <nav class="navbar">
+    <a href="/" class="logo">
+      <img src="{{ url_for('static', filename='logo.png') }}" alt="LeakChecker">
+      <span>LeakChecker</span>
+    </a>
+
+    <div class="nav-toggle" id="navToggle" onclick="document.getElementById('navMenu').classList.toggle('active'); this.classList.toggle('open');">
+      <span></span><span></span><span></span>
+    </div>
+
+    <ul class="nav-links" id="navMenu">
+      <li><a href="/" {% if request.path == '/' %}class="active"{% endif %}>Home</a></li>
+      <li><a href="/breach" {% if request.path == '/breach' %}class="active"{% endif %}>Breach Checker</a></li>
+      <li><a href="/how" {% if request.path == '/how' %}class="active"{% endif %}>How it Works</a></li>
+
+      {% if session.get("user") %}
+        <li><span class="nav-user">👤 {{ session.get("user") }}</span></li>
+        <li><a href="/logout" class="btn-nav">Logout</a></li>
+      {% else %}
+        <li><a href="/login" {% if request.path == '/login' %}class="active"{% endif %}>Login</a></li>
+        <li><a href="/register" class="btn-nav">Register</a></li>
+      {% endif %}
+    </ul>
+  </nav>
+
+  <!-- Main Content -->
+  <main class="main-content">
+    {% block content %}{% endblock %}
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    &copy; 2026 LeakChecker &middot; Built for cybersecurity awareness
+  </footer>
+
+</body>
+</html>

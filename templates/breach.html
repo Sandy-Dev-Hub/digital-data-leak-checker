@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+
+{% block title %}Breach Checker — LeakChecker{% endblock %}
+
+{% block content %}
+
+<section class="hero">
+  <div class="hero-badge">
+    <span class="pulse"></span>
+    Breach Database
+  </div>
+  <h1>Check for <span class="gradient-text">Data Breaches</span></h1>
+  <p class="hero-subtitle">See if your email address has appeared in any known data breaches or security incidents.</p>
+</section>
+
+<div class="container">
+  <div class="card form-card">
+
+    <form method="POST">
+      <div class="form-group">
+        <label class="form-label">Email Address</label>
+        <input type="email" name="email" class="form-input" placeholder="you@example.com" required>
+      </div>
+
+      <button type="submit" class="btn btn-primary btn-full">
+        🔎 Check Breach
+      </button>
+    </form>
+
+  </div>
+
+  <!-- Breach Results -->
+  {% if breach %}
+  <div class="breach-result mt-3">
+    <div class="breach-alert card">
+      <div class="breach-alert-header">
+        ⚠️ Data Breach Detected
+      </div>
+      <div class="breach-detail">
+        <span class="breach-detail-label">Platform</span>
+        <span class="breach-detail-value">{{ breach.platform }}</span>
+      </div>
+      <div class="breach-detail">
+        <span class="breach-detail-label">Year</span>
+        <span class="breach-detail-value">{{ breach.year }}</span>
+      </div>
+      <div class="breach-detail">
+        <span class="breach-detail-label">Data Exposed</span>
+        <span class="breach-detail-value">{{ breach.data }}</span>
+      </div>
+    </div>
+  </div>
+
+  {% elif request.method == "POST" %}
+  <div class="breach-result mt-3">
+    <div class="breach-safe">
+      <h3>✅ No breach found — You're safe!</h3>
+    </div>
+  </div>
+  {% endif %}
+
+</div>
+
+{% endblock %}

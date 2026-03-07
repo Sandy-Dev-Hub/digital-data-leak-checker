@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block title %}Register — LeakChecker{% endblock %}
+
+{% block content %}
+
+<div class="auth-wrapper">
+  <div class="auth-card card">
+
+    <div class="card-header">
+      <div class="card-icon">🚀</div>
+      <h2 class="card-title">Create Account</h2>
+      <p class="card-description">Join LeakChecker and protect your digital identity</p>
+    </div>
+
+    <form method="POST">
+      <div class="form-group">
+        <label class="form-label">Username</label>
+        <input type="text" name="username" class="form-input" placeholder="Choose a username" required>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Email Address</label>
+        <input type="email" name="email" class="form-input" placeholder="you@example.com" required>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Password</label>
+        <input type="password" name="password" class="form-input" placeholder="Create a strong password" required>
+      </div>
+
+      <button type="submit" class="btn btn-primary btn-full">Create Account</button>
+    </form>
+
+    <div class="card-footer">
+      Already have an account? <a href="/login">Sign in</a>
+    </div>
+
+  </div>
+</div>
+
+{% endblock %}
