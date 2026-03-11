@@ -1,0 +1,31 @@
+# Virtual environment
+venv/
+
+# Environment variables
+.env
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Database
+*.db
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Test Scripts
+test_db.py
+test_db_2.py
+test_db_output.txt
+test_fixed_conn.txt
+diff.txt
+
+# Local secrets and configs
+project.txt

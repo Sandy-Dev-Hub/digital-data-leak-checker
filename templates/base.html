@@ -24,7 +24,15 @@
 
     <ul class="nav-links" id="navMenu">
       <li><a href="/" {% if request.path == '/' %}class="active"{% endif %}>Home</a></li>
-      <li><a href="/breach" {% if request.path == '/breach' %}class="active"{% endif %}>Breach Checker</a></li>
+      <li class="dropdown" tabindex="0">
+        <a href="#" class="dropbtn">Security Tools ▼</a>
+        <div class="dropdown-content">
+          <a href="/breach" {% if request.path == '/breach' %}class="active"{% endif %}>Breach Checker</a>
+          <a href="/phishing" {% if request.path == '/phishing' %}class="active"{% endif %}>Phishing Analyzer</a>
+          <a href="/password-checker" {% if request.path == '/password-checker' %}class="active"{% endif %}>Password Security Checker</a>
+        </div>
+      </li>
+      <li><a href="/awareness" {% if request.path == '/awareness' %}class="active"{% endif %}>Awareness Trainer</a></li>
       <li><a href="/how" {% if request.path == '/how' %}class="active"{% endif %}>How it Works</a></li>
 
       {% if session.get("user") %}
@@ -46,6 +54,73 @@
   <footer class="footer">
     &copy; 2026 LeakChecker &middot; Built for cybersecurity awareness
   </footer>
+
+  <!-- ═══ AI Chatbot Panel ═══ -->
+  <button class="chatbot-toggle" id="chatToggle" onclick="toggleChat()" title="AI Assistant">
+    <span class="chatbot-toggle-icon" id="chatIcon">💬</span>
+  </button>
+
+  <div class="chatbot-panel" id="chatPanel">
+    <div class="chatbot-header">
+      <span>🤖 LeakChecker AI</span>
+      <button class="chatbot-close" onclick="toggleChat()">✕</button>
+    </div>
+    <div class="chat-messages" id="chatMessages">
+      <div class="chat-msg bot">
+        Hi! I'm your cybersecurity assistant. Ask me anything about online safety, phishing, passwords, or data protection.
+      </div>
+    </div>
+    <div class="chat-input-row">
+      <input type="text" id="chatInput" class="chat-input" placeholder="Ask about cybersecurity..." onkeydown="if(event.key==='Enter')sendChat()">
+      <button class="chat-send" onclick="sendChat()">➤</button>
+    </div>
+  </div>
+
+  <script>
+    function toggleChat() {
+      const panel = document.getElementById('chatPanel');
+      const icon = document.getElementById('chatIcon');
+      panel.classList.toggle('open');
+      icon.textContent = panel.classList.contains('open') ? '✕' : '💬';
+    }
+
+    async function sendChat() {
+      const input = document.getElementById('chatInput');
+      const messages = document.getElementById('chatMessages');
+      const text = input.value.trim();
+      if (!text) return;
+
+      // User message
+      const userDiv = document.createElement('div');
+      userDiv.className = 'chat-msg user';
+      userDiv.textContent = text;
+      messages.appendChild(userDiv);
+      input.value = '';
+      messages.scrollTop = messages.scrollHeight;
+
+      // Loading indicator
+      const loadDiv = document.createElement('div');
+      loadDiv.className = 'chat-msg bot chat-loading';
+      loadDiv.textContent = 'Thinking...';
+      messages.appendChild(loadDiv);
+      messages.scrollTop = messages.scrollHeight;
+
+      try {
+        const res = await fetch('/chat', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({message: text})
+        });
+        const data = await res.json();
+        loadDiv.textContent = data.reply;
+        loadDiv.classList.remove('chat-loading');
+      } catch (err) {
+        loadDiv.textContent = 'Sorry, something went wrong.';
+        loadDiv.classList.remove('chat-loading');
+      }
+      messages.scrollTop = messages.scrollHeight;
+    }
+  </script>
 
 </body>
 </html>

@@ -40,6 +40,19 @@
 
   </div>
 
+  <!-- Live Monitoring Promo Banner (Added Feature) -->
+  {% if not session.get("user") %}
+  <div class="card promo-card mt-3" style="border: 1px solid var(--primary-color); background: rgba(0, 240, 255, 0.05);">
+    <div class="tips-section-title" style="color: var(--primary-color);">🛡️ Want 24/7 Live Monitoring?</div>
+    <p style="color: var(--text-secondary); margin-top: 10px; line-height: 1.5;">
+      Register a free account today and our Live Security Scanner will continuously 
+      monitor your email in the background against live threat-intelligence databases. 
+      If your data is ever compromised in a new Dark Web leak, we will alert you immediately via email!
+    </p>
+    <a href="/register" class="btn btn-outline" style="margin-top: 15px; display: inline-block; width: 100%; text-align: center;">Register Now for Free Protection</a>
+  </div>
+  {% endif %}
+
   <!-- Results -->
   {% if total_score is not none and total_score is defined %}
   <div class="results-section mt-4">
@@ -134,6 +147,26 @@
         </div>
       </div>
     </div>
+
+    <!-- AI Security Insight -->
+    {% if ai_insight %}
+    <div class="card ai-card mt-3">
+      <div class="tips-section-title">⚡ AI Security Insight</div>
+      <div class="ai-insight-text">
+        {{ ai_insight }}
+      </div>
+    </div>
+    {% endif %}
+
+    <!-- AI Risk Explanation -->
+    {% if ai_explanation %}
+    <div class="card ai-card mt-2">
+      <div class="tips-section-title">🧠 AI Risk Explanation</div>
+      <div class="ai-explanation">
+        {{ ai_explanation }}
+      </div>
+    </div>
+    {% endif %}
 
   </div>
   {% endif %}

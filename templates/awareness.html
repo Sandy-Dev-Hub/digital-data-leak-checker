@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+
+{% block title %}Security Awareness Trainer — LeakChecker{% endblock %}
+
+{% block content %}
+
+<section class="hero">
+  <div class="hero-badge">
+    <span class="pulse"></span>
+    AI Awareness Trainer
+  </div>
+  <h1>Cybersecurity <span class="gradient-text">Awareness Quiz</span></h1>
+  <p class="hero-subtitle">Answer a few questions about your online habits and our AI will generate a personalized security awareness report.</p>
+</section>
+
+<div class="container">
+
+  {% if not report %}
+  <div class="card">
+    <form method="POST" class="quiz-form">
+
+      {% for q in questions %}
+      <div class="quiz-question">
+        <div class="quiz-question-number">{{ loop.index }}</div>
+        <div class="quiz-question-body">
+          <p class="quiz-question-text">{{ q }}</p>
+          <div class="quiz-options">
+            <label class="quiz-option">
+              <input type="radio" name="q{{ loop.index0 }}" value="Yes" required>
+              <span class="quiz-option-label">Yes</span>
+            </label>
+            <label class="quiz-option">
+              <input type="radio" name="q{{ loop.index0 }}" value="No">
+              <span class="quiz-option-label">No</span>
+            </label>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+
+      <button type="submit" class="btn btn-primary btn-full mt-3">
+        📋 Generate My Report
+      </button>
+    </form>
+  </div>
+  {% endif %}
+
+  {% if report %}
+  <div class="awareness-report card mt-3">
+    <div class="tips-section-title" style="margin-bottom: 1rem;">📊 Your Personalized Awareness Report</div>
+    <div class="ai-explanation">
+      {{ report }}
+    </div>
+    <div class="mt-3" style="text-align: center;">
+      <a href="/awareness" class="btn btn-outline">🔄 Retake Quiz</a>
+    </div>
+  </div>
+  {% endif %}
+
+</div>
+
+{% endblock %}

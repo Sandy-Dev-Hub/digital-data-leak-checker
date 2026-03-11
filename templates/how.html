@@ -4,128 +4,129 @@
 
 {% block content %}
 
-<div class="how-page container-wide">
-
-  <h1 class="section-title">How <span class="gradient-text">LeakChecker</span> Works</h1>
-  <p class="section-subtitle">A cybersecurity awareness tool that analyzes patterns in your personal data and provides actionable security recommendations.</p>
-
-  <div class="card">
-
-    <!-- Step 1 -->
-    <div class="how-section">
-      <div class="how-section-header">
-        <div class="how-section-number">1</div>
-        <h2 class="how-section-title">User Input</h2>
-      </div>
-      <p>The process begins when you enter an email address and phone number. Before analysis, the application validates the information to ensure correct formatting.</p>
-      <ul>
-        <li>Email format is checked using regular expressions</li>
-        <li>Phone number must contain exactly 10 digits</li>
-      </ul>
-    </div>
-
-    <div class="section-divider"></div>
-
-    <!-- Step 2 -->
-    <div class="how-section">
-      <div class="how-section-header">
-        <div class="how-section-number">2</div>
-        <h2 class="how-section-title">Risk Analysis</h2>
-      </div>
-      <p>After validation, the system analyzes patterns in the email and phone number to identify potential security risks.</p>
-      <ul>
-        <li>Common public email domains may increase exposure risk</li>
-        <li>Short usernames are easier to guess</li>
-        <li>Numbers inside usernames may create predictable patterns</li>
-        <li>Phone numbers with common prefixes are analyzed</li>
-        <li>Sequential digits increase vulnerability</li>
-      </ul>
-    </div>
-
-    <div class="section-divider"></div>
-
-    <!-- Step 3 -->
-    <div class="how-section">
-      <div class="how-section-header">
-        <div class="how-section-number">3</div>
-        <h2 class="how-section-title">Risk Score Calculation</h2>
-      </div>
-      <p>Each detected pattern contributes to a risk score. The system calculates separate scores for email and phone, then combines them.</p>
-      <ul>
-        <li>Email Risk Score</li>
-        <li>Phone Risk Score</li>
-        <li>Total Risk Score</li>
-      </ul>
-    </div>
-
-    <div class="section-divider"></div>
-
-    <!-- Step 4 -->
-    <div class="how-section">
-      <div class="how-section-header">
-        <div class="how-section-number">4</div>
-        <h2 class="how-section-title">Risk Classification</h2>
-      </div>
-      <p>Based on the total score, the system categorizes the risk level into three groups:</p>
-      <ul>
-        <li><strong>Low Risk</strong> — Minimal exposure</li>
-        <li><strong>Medium Risk</strong> — Moderate risk</li>
-        <li><strong>High Risk</strong> — Higher probability of data exposure</li>
-      </ul>
-    </div>
-
-    <div class="section-divider"></div>
-
-    <!-- Step 5 -->
-    <div class="how-section">
-      <div class="how-section-header">
-        <div class="how-section-number">5</div>
-        <h2 class="how-section-title">Breach Detection</h2>
-      </div>
-      <p>LeakChecker compares your email against a simulated breach dataset representing known cybersecurity incidents. If a match is found, the system displays the platform name, year of the breach, and the type of data exposed.</p>
-    </div>
-
-    <div class="section-divider"></div>
-
-    <!-- Step 6 -->
-    <div class="how-section">
-      <div class="how-section-header">
-        <div class="how-section-number">6</div>
-        <h2 class="how-section-title">Security Recommendations</h2>
-      </div>
-      <p>After completing the analysis, the system provides tailored security suggestions to improve your online safety.</p>
-      <ul>
-        <li>Enable Two Factor Authentication</li>
-        <li>Avoid sharing phone numbers publicly</li>
-        <li>Use strong and unique passwords</li>
-        <li>Monitor account activity regularly</li>
-      </ul>
-    </div>
-
+<div class="chat-container">
+  
+  <div class="chat-header">
+    <h1 class="chat-title">How <span class="gradient-text">LeakChecker</span> Works</h1>
+    <p class="chat-subtitle">A conversation about how we protect and analyze your data.</p>
   </div>
 
-  <!-- Workflow Diagram -->
-  <div class="card mt-4">
-    <div class="tips-section-title" style="justify-content:center; margin-bottom:1.5rem;">⚙️ System Workflow</div>
-    <div class="workflow-diagram">
-      <div class="workflow-step">User Input</div>
-      <div class="workflow-arrow">→</div>
-      <div class="workflow-step">Pattern Analysis</div>
-      <div class="workflow-arrow">→</div>
-      <div class="workflow-step">Risk Score</div>
-      <div class="workflow-arrow">→</div>
-      <div class="workflow-step">Breach Check</div>
-      <div class="workflow-arrow">→</div>
-      <div class="workflow-step">Security Tips</div>
+  <!-- Chat Message 1: User -->
+  <div class="chat-message user">
+    <div class="chat-avatar user-avatar">U</div>
+    <div class="chat-content">
+      <p>Can you explain what happens when I enter my email address and phone number on the home page?</p>
     </div>
   </div>
 
-  <!-- Conclusion -->
-  <div class="card mt-3">
-    <div class="tips-section-title" style="justify-content:center;">📋 Conclusion</div>
-    <p style="color: var(--text-secondary); text-align: center; line-height: 1.8; margin-top: 0.75rem;">
-      LeakChecker demonstrates how simple pattern analysis and breach monitoring can help you become more aware of your digital security. By analyzing personal data patterns and providing recommendations, the system encourages safer online practices.
-    </p>
+  <!-- Chat Message 1: Assistant -->
+  <div class="chat-message assistant">
+    <div class="chat-avatar assistant-avatar">
+      <img src="{{ url_for('static', filename='images/logo.png') }}" alt="AI" onerror="this.style.display='none'; this.parentNode.innerHTML='🤖'" style="width:100%; height:100%; border-radius:4px; object-fit:cover;">
+    </div>
+    <div class="chat-content">
+      <p>The process begins with <strong>User Input Validation</strong>. Before any deep analysis, the application checks your information to ensure it's formatted correctly:</p>
+      <ul>
+        <li>The email format is verified using regular expressions to ensure it represents a valid address.</li>
+        <li>The phone number is checked to ensure it contains exactly 10 digits (in standard formats).</li>
+      </ul>
+      <p>Once validated, we securely temporarily store this input in memory for the duration of the analysis.</p>
+    </div>
+  </div>
+
+  <!-- Chat Message 2: User -->
+  <div class="chat-message user">
+    <div class="chat-avatar user-avatar">U</div>
+    <div class="chat-content">
+      <p>Once my input is validated, how do you determine if my data is risky?</p>
+    </div>
+  </div>
+
+  <!-- Chat Message 2: Assistant -->
+  <div class="chat-message assistant">
+    <div class="chat-avatar assistant-avatar">🤖</div>
+    <div class="chat-content">
+      <p>We perform <strong>Pattern Analysis</strong> on both your email and phone number to identify potential vulnerabilities. Here’s what we look for:</p>
+      <ul>
+        <li><strong>Email Domains:</strong> Common public domains might increase exposure risk compared to private ones.</li>
+        <li><strong>Username Structure:</strong> Short usernames or usernames containing raw numbers can create predictable patterns that attackers exploit.</li>
+        <li><strong>Phone Numbers:</strong> We analyze prefixes and look for sequential digits that might make the number easier to guess or spoof.</li>
+      </ul>
+      <p>Each detected pattern contributes to an overall <strong>Risk Score</strong>.</p>
+    </div>
+  </div>
+
+  <!-- Chat Message 3: User -->
+  <div class="chat-message user">
+    <div class="chat-avatar user-avatar">U</div>
+    <div class="chat-content">
+      <p>Can you break down how the Risk Score is calculated?</p>
+    </div>
+  </div>
+
+  <!-- Chat Message 3: Assistant -->
+  <div class="chat-message assistant">
+    <div class="chat-avatar assistant-avatar">🤖</div>
+    <div class="chat-content">
+      <p>Absolutely. The system calculates separate scores which are then combined:</p>
+      <p>We calculate an <code>Email Risk Score</code> and a <code>Phone Risk Score</code> independently. Based on the total accumulated score, we categorize your risk level into three groups:</p>
+      <ul>
+        <li><span style="color: var(--risk-low); font-weight: 600;">Low Risk:</span> Minimal exposure. Your data structure is standard and doesn't exhibit highly predictable patterns.</li>
+        <li><span style="color: var(--risk-medium); font-weight: 600;">Medium Risk:</span> Moderate risk. There might be some predictable elements in your username or number.</li>
+        <li><span style="color: var(--risk-high); font-weight: 600;">High Risk:</span> Higher probability of data exposure due to multiple vulnerabilities detected.</li>
+      </ul>
+      <p>This score doesn't mean you've been hacked, just that the structure of your data is statistically more vulnerable to targeted scraping or dictionary attacks.</p>
+    </div>
+  </div>
+
+  <!-- Chat Message 4: User -->
+  <div class="chat-message user">
+    <div class="chat-avatar user-avatar">U</div>
+    <div class="chat-content">
+      <p>What about the Breach Detection part? How do you check if I've actually been compromised?</p>
+    </div>
+  </div>
+
+  <!-- Chat Message 4: Assistant -->
+  <div class="chat-message assistant">
+    <div class="chat-avatar assistant-avatar">🤖</div>
+    <div class="chat-content">
+      <p>For <strong>Breach Detection</strong>, LeakChecker compares your email against a dataset representing known cybersecurity incidents. If a match is found in our system, we immediately alert you.</p>
+      <p>We display the platform name where the breach occurred, the year of the incident, and most importantly, the <em>type of data</em> that was exposed (like passwords, IP addresses, or personal messages).</p>
+      <div class="workflow-diagram" style="margin: 1.5rem 0; padding: 1rem; background: rgba(0,0,0,0.2); border-radius: 8px;">
+        <div class="workflow-step">Input</div>
+        <div class="workflow-arrow">→</div>
+        <div class="workflow-step">Cross-Reference</div>
+        <div class="workflow-arrow">→</div>
+        <div class="workflow-step">Breach Check</div>
+        <div class="workflow-arrow">→</div>
+        <div class="workflow-step">Alert</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Chat Message 5: User -->
+  <div class="chat-message user">
+    <div class="chat-avatar user-avatar">U</div>
+    <div class="chat-content">
+      <p>What should I do if my Risk Score is high or you find a breach?</p>
+    </div>
+  </div>
+
+  <!-- Chat Message 5: Assistant -->
+  <div class="chat-message assistant">
+    <div class="chat-avatar assistant-avatar">🤖</div>
+    <div class="chat-content">
+      <p>After completing the analysis, we don't just leave you with bad news. We provide tailored <strong>Security Recommendations</strong> to improve your posture.</p>
+      <p>Common recommendations include:</p>
+      <ul>
+        <li>Enabling Multi-Factor Authentication (MFA) on your most important accounts.</li>
+        <li>Changing compromised passwords immediately to strong, unique alternatives.</li>
+        <li>Removing your phone number from public social media profiles if possible.</li>
+        <li>Using our Password Checker tool to verify your password strength.</li>
+      </ul>
+      <p>The goal of LeakChecker isn't just to report issues, but to help you actively become more secure and aware of your digital footprint.</p>
+    </div>
   </div>
 
 </div>

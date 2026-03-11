@@ -38,7 +38,11 @@
       </div>
       <div class="breach-detail">
         <span class="breach-detail-label">Platform</span>
-        <span class="breach-detail-value">{{ breach.platform }}</span>
+        <span class="breach-detail-value">
+          {% for p in breach.platforms %}
+            <a href="{{ p.url }}" target="_blank" rel="noopener noreferrer" style="color: #64ffda; text-decoration: underline; text-underline-offset: 2px;">{{ p.name }}</a>{% if not loop.last %}, {% endif %}
+          {% endfor %}
+        </span>
       </div>
       <div class="breach-detail">
         <span class="breach-detail-label">Year</span>
