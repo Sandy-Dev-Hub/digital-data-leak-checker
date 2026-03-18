@@ -36,6 +36,10 @@
       Already have an account? <a href="/login">Sign in</a>
     </div>
 
+    {% if error %}
+    <div class="error-msg" style="color: #ff4d4d; margin-top: 1rem; text-align: center;">⚠️ {{ error }}</div>
+    {% endif %}
+
   </div>
 </div>
 

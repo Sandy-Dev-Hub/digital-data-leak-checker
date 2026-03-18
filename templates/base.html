@@ -11,7 +11,7 @@
 
 <body>
 
-  <!-- Navbar -->
+
   <nav class="navbar">
     <a href="/" class="logo">
       <img src="{{ url_for('static', filename='logo.png') }}" alt="LeakChecker">
@@ -45,17 +45,17 @@
     </ul>
   </nav>
 
-  <!-- Main Content -->
+
   <main class="main-content">
     {% block content %}{% endblock %}
   </main>
 
-  <!-- Footer -->
+
   <footer class="footer">
     &copy; 2026 LeakChecker &middot; Built for cybersecurity awareness
   </footer>
 
-  <!-- ═══ AI Chatbot Panel ═══ -->
+
   <button class="chatbot-toggle" id="chatToggle" onclick="toggleChat()" title="AI Assistant">
     <span class="chatbot-toggle-icon" id="chatIcon">💬</span>
   </button>
@@ -90,7 +90,7 @@
       const text = input.value.trim();
       if (!text) return;
 
-      // User message
+
       const userDiv = document.createElement('div');
       userDiv.className = 'chat-msg user';
       userDiv.textContent = text;
@@ -98,7 +98,7 @@
       input.value = '';
       messages.scrollTop = messages.scrollHeight;
 
-      // Loading indicator
+
       const loadDiv = document.createElement('div');
       loadDiv.className = 'chat-msg bot chat-loading';
       loadDiv.textContent = 'Thinking...';

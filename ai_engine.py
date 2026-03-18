@@ -2,10 +2,6 @@ import os
 from dotenv import load_dotenv
 from groq import Groq
 
-# ──────────────────────────────────────────────
-# GROQ API CONFIGURATION
-# Place your key in the .env file: GROQ_API_KEY=gsk_...
-# ──────────────────────────────────────────────
 load_dotenv()
 GROQ_API_KEY = os.getenv("GROQ_API_KEY")
 MODEL = "llama-3.1-8b-instant"
@@ -14,7 +10,6 @@ client = Groq(api_key=GROQ_API_KEY)
 
 
 def _call_groq(system_prompt, user_prompt, max_tokens=1024):
-    """Helper: send a chat completion request to Groq."""
     try:
         response = client.chat.completions.create(
             model=MODEL,
@@ -30,9 +25,6 @@ def _call_groq(system_prompt, user_prompt, max_tokens=1024):
         return f"AI service unavailable: {str(e)}"
 
 
-# ──────────────────────────────────────────────
-# 1.  AI RISK EXPLANATION ENGINE
-# ──────────────────────────────────────────────
 def generate_risk_explanation(email, phone, email_score, phone_score,
                               total_score, level, email_reasons, phone_reasons):
     system_prompt = (
@@ -59,9 +51,6 @@ def generate_risk_explanation(email, phone, email_score, phone_score,
     return _call_groq(system_prompt, user_prompt)
 
 
-# ──────────────────────────────────────────────
-# 2.  AI SECURITY INSIGHT GENERATOR
-# ──────────────────────────────────────────────
 def generate_security_insight(total_score, level, email_reasons, phone_reasons, breach=None):
     system_prompt = (
         "You are a cybersecurity advisor. Write a concise 2-3 sentence "
@@ -87,9 +76,6 @@ def generate_security_insight(total_score, level, email_reasons, phone_reasons, 
     return _call_groq(system_prompt, user_prompt, max_tokens=256)
 
 
-# ──────────────────────────────────────────────
-# 3.  AI CYBERSECURITY CHATBOT
-# ──────────────────────────────────────────────
 def chat_response(user_message):
     system_prompt = (
         "You are LeakChecker AI Assistant.\n"
@@ -123,9 +109,6 @@ def chat_response(user_message):
     return _call_groq(system_prompt, user_message, max_tokens=512)
 
 
-# ──────────────────────────────────────────────
-# 4.  AI PHISHING MESSAGE ANALYZER
-# ──────────────────────────────────────────────
 def analyze_phishing(message_text):
     system_prompt = (
         "You are a phishing detection expert. Analyze the message provided "
@@ -142,9 +125,6 @@ def analyze_phishing(message_text):
     return _call_groq(system_prompt, f"Analyze this message:\n\n{message_text}")
 
 
-# ──────────────────────────────────────────────
-# 5.  AI AWARENESS TRAINER
-# ──────────────────────────────────────────────
 AWARENESS_QUESTIONS = [
     "Do you reuse the same password across multiple websites?",
     "Do you verify URLs/links before clicking on them?",
@@ -155,7 +135,6 @@ AWARENESS_QUESTIONS = [
 
 
 def generate_awareness_report(answers):
-    """answers: list of dicts [{"question": ..., "answer": "Yes"/"No"}, ...]"""
     system_prompt = (
         "You are a cybersecurity awareness trainer. The user has answered "
         "a security habits questionnaire. Analyze their answers and produce "

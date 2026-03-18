@@ -4,7 +4,7 @@
 
 {% block content %}
 
-<!-- Hero Section -->
+
 <section class="hero">
   <div class="hero-badge">
     <span class="pulse"></span>
@@ -14,7 +14,7 @@
   <p class="hero-subtitle">Enter your email and phone number to analyze potential security vulnerabilities and receive personalized protection tips.</p>
 </section>
 
-<!-- Scan Form -->
+
 <div class="container">
   <div class="card form-card">
 
@@ -40,7 +40,7 @@
 
   </div>
 
-  <!-- Live Monitoring Promo Banner (Added Feature) -->
+
   {% if not session.get("user") %}
   <div class="card promo-card mt-3" style="border: 1px solid var(--primary-color); background: rgba(0, 240, 255, 0.05);">
     <div class="tips-section-title" style="color: var(--primary-color);">🛡️ Want 24/7 Live Monitoring?</div>
@@ -53,11 +53,11 @@
   </div>
   {% endif %}
 
-  <!-- Results -->
+
   {% if total_score is not none and total_score is defined %}
   <div class="results-section mt-4">
 
-    <!-- Score Header -->
+
     <div class="score-header {{ 'low' if level == 'LOW' else ('medium' if level == 'MEDIUM' else 'high') }}">
       <div>
         <div class="score-label">Total Risk Score</div>
@@ -68,7 +68,7 @@
       </span>
     </div>
 
-    <!-- Score Breakdown -->
+
     <div class="score-grid">
       <div class="score-card">
         <div class="score-card-header">
@@ -105,7 +105,7 @@
       </div>
     </div>
 
-    <!-- Tips -->
+
     <div class="card">
       <div class="tips-section">
         <div class="tips-section-title">🛡️ General Security Tips</div>
@@ -148,7 +148,7 @@
       </div>
     </div>
 
-    <!-- AI Security Insight -->
+
     {% if ai_insight %}
     <div class="card ai-card mt-3">
       <div class="tips-section-title">⚡ AI Security Insight</div>
@@ -158,7 +158,7 @@
     </div>
     {% endif %}
 
-    <!-- AI Risk Explanation -->
+
     {% if ai_explanation %}
     <div class="card ai-card mt-2">
       <div class="tips-section-title">🧠 AI Risk Explanation</div>

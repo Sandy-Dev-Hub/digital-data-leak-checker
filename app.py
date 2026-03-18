@@ -15,28 +15,19 @@ from apscheduler.schedulers.background import BackgroundScheduler
 app = Flask(__name__)
 app.secret_key = "secret123"
 
-# DATABASE
-# Password is URL encoded to handle the "@" symbol safely
 SUPABASE_DB_URL = os.getenv("SUPABASE_DB_URL", "postgresql://postgres:Vicky%4030110505@db.mqkdjudzlarhhvscjskl.supabase.co:5432/postgres")
 
 def get_db_connection():
-    """Returns a connection to the Supabase PostgreSQL database."""
     conn = psycopg2.connect(SUPABASE_DB_URL)
     conn.autocommit = True
     return conn
 
 
-# ──────────────────────────────────────────────
-# AUTOMATED BREACH MONITORING (BACKGROUND JOB)
-# ──────────────────────────────────────────────
-
 SENDER_EMAIL = os.getenv("SENDER_EMAIL")
 SENDER_PASSWORD = os.getenv("SENDER_PASSWORD")
 
 def send_alert_email(to_email, platform, data_leaked):
-    """Sends a warning email to a user if their data was in a breach."""
     if not SENDER_EMAIL or not SENDER_PASSWORD:
-        print("[!] SENDER_EMAIL or SENDER_PASSWORD not set in .env. Skipping email.")
         return
 
     subject = "URGENT: Your data was found in a new breach!"
@@ -62,20 +53,15 @@ def send_alert_email(to_email, platform, data_leaked):
     msg.attach(MIMEText(body, 'plain'))
 
     try:
-        # Connecting to Gmail's SMTP server
         server = smtplib.SMTP('smtp.gmail.com', 587)
         server.starttls()
         server.login(SENDER_EMAIL, SENDER_PASSWORD)
         server.send_message(msg)
         server.quit()
-        print(f"[+] Successfully sent breach alert email to {to_email}")
     except Exception as e:
-        print(f"[-] Failed to send email to {to_email}. Error: {e}")
+        print(f"Error: {e}")
 
 def monitor_breaches():
-    """Background task that checks live OSINT APIs for each user's email."""
-    print("[*] Running scheduled live breach monitor scan...")
-
     try:
         conn = get_db_connection()
         with conn.cursor() as cur:
@@ -84,23 +70,17 @@ def monitor_breaches():
             
             for user in users:
                 user_email = user[0]
-                
-                # Querying the free OSINT LeakCheck API for live data
                 response = requests.get(f"https://leakcheck.io/api/public?check={user_email}")
                 
                 if response.status_code == 200:
                     data = response.json()
                     
-                    # 'success' means they found records
                     if data.get("success") and data.get("sources"):
-                        # The free endpoint returns a list of source names (e.g., ["Facebook", "LinkedIn"])
                         breach_sources = data["sources"]
                         
                         for source_obj in breach_sources:
-                            # Some APIs return strings, some return dicts. Safe extraction:
                             platform_name = source_obj.get("name") if isinstance(source_obj, dict) else source_obj
                             
-                            # Did we already email this user about this specific platform?
                             cur.execute(
                                 "SELECT 1 FROM alerts WHERE email=%s AND breach_name=%s", 
                                 (user_email, platform_name)
@@ -108,34 +88,28 @@ def monitor_breaches():
                             already_alerted = cur.fetchone()
 
                             if not already_alerted:
-                                print(f"[!] NEW LIVE BREACH detected for {user_email} on {platform_name}! Alerting user...")
-                                # Send email
                                 send_alert_email(user_email, platform_name, "Data leak found in public databases")
                                 
-                                # Log that we sent the alert so we don't spam them in 60 seconds
                                 cur.execute(
                                     "INSERT INTO alerts (email, breach_name) VALUES (%s, %s)", 
                                     (user_email, platform_name)
                                 )
                 
                 else:
-                    print(f"[-] OSINT API Rate limited or failed for {user_email}. Status: {response.status_code}")
+                    print(f"OSINT API Rate limited or failed for {user_email}. Status: {response.status_code}")
 
     except Exception as e:
-        print(f"[-] Error during live breach monitoring: {e}")
+        print(f"Error: {e}")
     finally:
         if 'conn' in locals():
             conn.close()
 
-# Start the background scheduler
 scheduler = BackgroundScheduler()
-# Runs every 60 seconds for testing/demonstration purposes
 scheduler.add_job(func=monitor_breaches, trigger="interval", seconds=60)
 scheduler.start()
 
 
 
-# EMAIL ANALYSIS
 def analyze_email(email):
 
     score = 0
@@ -163,7 +137,6 @@ def analyze_email(email):
     return score, reasons
 
 
-# PHONE ANALYSIS
 def analyze_phone(phone):
 
     score = 0
@@ -185,7 +158,6 @@ def analyze_phone(phone):
         score += 25
         reasons.append("Repeated digits pattern")
         
-    # Catch 3 or more repeated digits anywhere (like 777 or 555)
     if re.search(r"(\d)\1{2,}", phone):
         score += 15
         reasons.append("Contains blocks of repeated numbers")
@@ -193,7 +165,6 @@ def analyze_phone(phone):
     return score, reasons
 
 
-# RISK LEVEL
 def get_level(score):
 
     if score <= 30:
@@ -204,7 +175,6 @@ def get_level(score):
         return "HIGH"
 
 
-# GENERAL TIPS
 def get_general_tips(score):
 
     if score <= 20:
@@ -229,7 +199,6 @@ def get_general_tips(score):
         ]
 
 
-# EMAIL TIPS
 def get_email_tips(score):
 
     if score <= 10:
@@ -246,7 +215,6 @@ def get_email_tips(score):
         ]
 
 
-# PHONE TIPS
 def get_phone_tips(score):
 
     if score <= 10:
@@ -262,7 +230,6 @@ def get_phone_tips(score):
         ]
 
 
-# HOME PAGE
 @app.route("/", methods=["GET","POST"])
 def home():
 
@@ -272,7 +239,6 @@ def home():
         phone = request.form["phone"]
 
         try:
-            # Check if email is valid and has a real TLD/domain structure
             valid = validate_email(email, check_deliverability=True)
             email = valid.normalized
         except EmailNotValidError as e:
@@ -284,20 +250,15 @@ def home():
         email_score,email_reasons = analyze_email(email)
         phone_score,phone_reasons = analyze_phone(phone)
 
-        # ---------------------------------------------
-        # LIVE API BREACH CHECK INJECTION
-        # ---------------------------------------------
         try:
             response = requests.get(f"https://leakcheck.io/api/public?check={email}", timeout=3)
             if response.status_code == 200:
                 data = response.json()
                 if data.get("success") and data.get("sources"):
-                    # The email was found in a real, live data breach
                     email_score += 50
                     email_reasons.append(f"CRITICAL: Found in {len(data['sources'])} real Dark Web leaks!")
         except Exception as e:
-            print(f"Failed to check live API during home scan: {e}")
-        # ---------------------------------------------
+            print(f"Error: {e}")
 
         total_score = email_score + phone_score
         level = get_level(total_score)
@@ -306,7 +267,6 @@ def home():
         email_tips = get_email_tips(email_score)
         phone_tips = get_phone_tips(phone_score)
 
-        # AI-powered explanation and insight (additive — does not replace rule-based scoring)
         ai_explanation = ai_engine.generate_risk_explanation(
             email, phone, email_score, phone_score,
             total_score, level, email_reasons, phone_reasons
@@ -333,7 +293,6 @@ def home():
     return render_template("home.html")
 
 
-# BREACH CHECKER
 @app.route("/breach", methods=["GET","POST"])
 def breach():
     breach = None
@@ -344,7 +303,6 @@ def breach():
         email = request.form["email"].lower()
 
         try:
-            # Validate email structure and domain deliverability
             valid = validate_email(email, check_deliverability=True)
             email = valid.normalized
         except EmailNotValidError as e:
@@ -352,19 +310,16 @@ def breach():
             return render_template("breach.html", breach=breach, safe=safe, error=error)
 
         try:
-            # Querying the live database!
             response = requests.get(f"https://leakcheck.io/api/public?check={email}", timeout=5)
             
             if response.status_code == 200:
                 data = response.json()
                 
                 if data.get("success") and data.get("sources"):
-                    # Extract platform names from the response
                     sources = data["sources"]
                     platforms = []
                     for s in sources:
                         name = str(s.get("name") or "Unknown") if isinstance(s, dict) else str(s)
-                        # If it looks like a domain, link directly, otherwise do a Google search
                         if "." in name and " " not in name:
                             url = f"https://{name}"
                         else:
@@ -373,26 +328,21 @@ def breach():
                             url = f"https://www.google.com/search?q={query}"
                         platforms.append({"name": name, "url": url})
                     
-                    # The free public API doesn't provide specific years or granular data details, 
-                    # so we format it nicely for the UI card
                     breach = {
                         "platforms": platforms,
                         "year": "Live Database Match",
                         "data": "Email / Password (varies by source)"
                     }
                 else:
-                    # If success is false or sources is empty, the email is safe!
                     safe = True
             else:
                 error = "Security API rate limited. Please try again in a few minutes."
                 
         except Exception as e:
-            error = f"Failed to connect to breach database: {e}"
+            error = f"Error: {e}"
 
     return render_template("breach.html", breach=breach, safe=safe, error=error)
 
-
-# HOW PAGE
 
 @app.route("/how")
 def how():
@@ -416,7 +366,7 @@ def login():
         conn.close()
 
         if user:
-            session["user"]=user[1]   # store username
+            session["user"]=user[1]
             return redirect("/")
 
         else:
@@ -425,7 +375,6 @@ def login():
     return render_template("login.html")
 
 
-# REGISTER
 @app.route("/register",methods=["GET","POST"])
 def register():
 
@@ -437,6 +386,12 @@ def register():
 
         conn = get_db_connection()
         with conn.cursor() as cur:
+            # Check if email already exists
+            cur.execute("SELECT 1 FROM users WHERE email=%s", (email,))
+            if cur.fetchone():
+                conn.close()
+                return render_template("register.html", error="Email already exists. Please sign in.")
+
             cur.execute(
                 "INSERT INTO users(username,email,password) VALUES(%s,%s,%s)",
                 (username, email, password)
@@ -456,9 +411,6 @@ def logout():
     return redirect("/")
 
 
-# ──────────────────────────────────────────────
-# AI CHATBOT API
-# ──────────────────────────────────────────────
 @app.route("/chat", methods=["POST"])
 def chat():
     data = request.get_json()
@@ -469,9 +421,6 @@ def chat():
     return jsonify({"reply": reply})
 
 
-# ──────────────────────────────────────────────
-# AI PHISHING ANALYZER
-# ──────────────────────────────────────────────
 @app.route("/phishing", methods=["GET","POST"])
 def phishing():
     result = None
@@ -482,17 +431,11 @@ def phishing():
     return render_template("phishing.html", result=result)
 
 
-# ──────────────────────────────────────────────
-# PASSWORD SECURITY CHECKER
-# ──────────────────────────────────────────────
 @app.route("/password-checker")
 def password_checker():
     return render_template("password_checker.html")
 
 
-# ──────────────────────────────────────────────
-# AI AWARENESS TRAINER
-# ──────────────────────────────────────────────
 @app.route("/awareness", methods=["GET","POST"])
 def awareness():
     questions = ai_engine.AWARENESS_QUESTIONS
